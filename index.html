@@ -1,0 +1,36 @@
+<html>
+
+<head>
+    <script type="application/javascript" src="https://unpkg.com/mqtt@3.0.0/dist/mqtt.min.js"></script>
+</head>
+
+<body style="margin: 0px;">
+    <audio controls id="audio" autoplay muted loop>
+        <source id="audioSource" src="https://archive.org/download/testmp3testfile/mpthreetest.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const base = urlParams.get("base")
+        const trackTopic = `${base}/track`
+        const volumeTopic = `${base}/volume`
+        const client = window.mqtt.connect("ws://5.196.95.208:8080")
+        client.subscribe(trackTopic)
+        client.subscribe(volumeTopic)
+        client.on("message", (topic, payload) => {
+            console.log(topic + " " + payload.toString())
+            if (topic === trackTopic) {
+                document.getElementById("audioSource").src = payload.toString()
+                document.getElementById("audio").load()
+                document.getElementById("audio").play()
+            }
+
+            if (topic === volumeTopic) {
+                document.getElementById("audio").volume = Number(payload)
+            }
+        })
+    </script>
+</body>
+
+</html>
