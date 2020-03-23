@@ -6,7 +6,9 @@
 
 <body style="margin: 0px;">
     <audio controls id="audio" autoplay muted loop>
-        <source id="audioSource" src="https://archive.org/download/testmp3testfile/mpthreetest.mp3" type="audio/mpeg">
+        <source id="audioSource"
+            src="https://r2---sn-oxujvavbox-jboz.googlevideo.com/videoplayback?expire=1584988301&ei=Lax4XpjULZaW1gKF2JvoAQ&ip=78.35.95.247&id=o-AD8q1FtwgIqr6fzbVfgUn99b3XO0ZpbdLwThTVeZm--q&itag=140&source=youtube&requiressl=yes&mh=BS&mm=31%2C29&mn=sn-oxujvavbox-jboz%2Csn-4g5ednz7&ms=au%2Crdu&mv=m&mvi=1&pl=18&initcwndbps=1555000&vprv=1&mime=audio%2Fmp4&gir=yes&clen=125695373&dur=7766.656&lmt=1548031544869070&mt=1584966585&fvip=2&keepalive=yes&c=WEB&txp=5535432&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cvprv%2Cmime%2Cgir%2Cclen%2Cdur%2Clmt&lsparams=mh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl%2Cinitcwndbps&lsig=ABSNjpQwRAIgAOYZbGXn_cKU2_sKpYsM920_XhohOui-2m21xAM4X_8CIGDgqvuRX_w22ihhvf8cdSm34El93dPlNxHRZa7bpNDq&sig=ADKhkGMwRAIgVaCJoWubk5JbtaWZ4S4HWs24mYMzx67hgCpbD1xW8QoCIDgLGViZLGt6Zdr4uv63BqNYH-8UGh0QPg2xK0eRP1Py&ratebypass=yes"
+            type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
 
@@ -15,7 +17,9 @@
         const base = urlParams.get("base")
         const trackTopic = `${base}/track`
         const volumeTopic = `${base}/volume`
-        const client = window.mqtt.connect("ws://5.196.95.208:8080")
+
+        const secure = window.location.protocol.startsWith("https")
+        const client = window.mqtt.connect(secure ? "wss://5.196.95.208:8081" : "ws://5.196.95.208:8080")
         client.subscribe(trackTopic)
         client.subscribe(volumeTopic)
         client.on("message", (topic, payload) => {
