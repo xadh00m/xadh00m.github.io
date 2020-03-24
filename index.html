@@ -9,7 +9,10 @@
         <source id="audioSource" src="" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
-
+    <input type="range" id="volumeSlider" min="0" max="100" value="0" oninput="setVolume(); return false;">
+    <form action="" method="post" onsubmit="setTrack(); return false;">
+        <input type="text" id="track" style="width:400;">
+    </form>
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const base = urlParams.get("base")
@@ -28,9 +31,18 @@
             }
 
             if (topic === volumeTopic) {
-                document.getElementById("audio").volume = Number(payload)
+                document.getElementById("audio").volume = Number(payload) / 100
+                document.getElementById("volumeSlider").value = Number(payload)
             }
         })
+
+        function setTrack() {
+            client.publish(trackTopic, document.getElementById("track").value)
+        }
+
+        function setVolume() {
+            client.publish(volumeTopic, document.getElementById("volumeSlider").value)
+        }
     </script>
 </body>
 
