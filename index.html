@@ -16,8 +16,7 @@
         const trackTopic = `${base}/track`
         const volumeTopic = `${base}/volume`
 
-        const secure = window.location.protocol.startsWith("https")
-        const client = window.mqtt.connect(secure ? "wss://5.196.95.208:8081" : "ws://5.196.95.208:8080")
+        const client = window.mqtt.connect("wss://test.mosquitto.org:8081")
         client.subscribe(trackTopic)
         client.subscribe(volumeTopic)
         client.on("message", (topic, payload) => {
