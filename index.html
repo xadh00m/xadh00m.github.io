@@ -14,6 +14,9 @@
         <input type="text" id="track" style="width:400;">
     </form>
     <script>
+        document.getElementById("audio").volume = 0.5
+        document.getElementById("volumeSlider").value = 50
+
         const urlParams = new URLSearchParams(window.location.search);
         const base = urlParams.get("base")
         const trackTopic = `${base}/track`
@@ -21,18 +24,12 @@
 
         const client = window.mqtt.connect("wss://test.mosquitto.org:8081")
         client.subscribe(trackTopic)
-        client.subscribe(volumeTopic)
         client.on("message", (topic, payload) => {
             console.log(topic + " " + payload.toString())
             if (topic === trackTopic) {
                 document.getElementById("audioSource").src = payload.toString()
                 document.getElementById("audio").load()
                 document.getElementById("audio").play()
-            }
-
-            if (topic === volumeTopic) {
-                document.getElementById("audio").volume = Number(payload) / 100
-                document.getElementById("volumeSlider").value = Number(payload)
             }
         })
 
@@ -41,7 +38,7 @@
         }
 
         function setVolume() {
-            client.publish(volumeTopic, document.getElementById("volumeSlider").value)
+            document.getElementById("audio").volume = document.getElementById("volumeSlider").value / 100
         }
     </script>
 </body>
